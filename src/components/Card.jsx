@@ -1,10 +1,11 @@
-import { useState } from "react";
+import "./Card.css";
 
-const Card = ({value, suit, image}) => {
-
-  return <div>
+const Card = ({ value, suit, image, idx}) => {
+  return (
+    <div className="Card" style={{zIndex:`${idx}`}}>
       <img src={image} alt={`${value} of ${suit}`} />
-    </div>;
+    </div>
+  );
 };
 
 export default Card;
