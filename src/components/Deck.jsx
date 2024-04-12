@@ -17,6 +17,7 @@ const Deck = () => {
       if (!response.data.success) {
         alert("Error: no cards remaining!");
       }
+      response.data.cards[0].angle = generateRandomAngle()
       setCards([...Cards, ...response.data.cards]);
       setLoading(false);
     } catch (err) {
@@ -28,12 +29,18 @@ const Deck = () => {
     setLoading(true);
     try {
       await axios.get(`${BASE_URL}/${Deck}/shuffle`);
-      setCards([])
+      setCards([]);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const generateRandomAngle = () => {
+    const num = Math.floor((Math.random()*35))
+    const randomAngle = Math.random() > .5 ? num : -Math.abs(num)
+    return randomAngle
+  }
 
   useEffect(
     function getDeckWhenMounted() {
@@ -42,7 +49,6 @@ const Deck = () => {
           const response = await axios.get(`${BASE_URL}/new/shuffle`);
           setDeck(response.data.deck_id);
           setLoading(false);
-          console.log("Fully loaded");
         } catch (err) {
           console.log(err);
         }
@@ -56,12 +62,13 @@ const Deck = () => {
     return (
       <div>
         <div className="Deck">
-          {Cards.map(({ image, value, suit }, idx) => {
+          {Cards.map(({ image, value, suit, angle }, idx) => {
             return (
               <Card
                 image={image}
                 value={value}
                 suit={suit}
+                angle={angle}
                 key={Deck + idx}
                 idx={idx}
               />
